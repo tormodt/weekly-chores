@@ -13,29 +13,32 @@ En motivasjonstjeneste for barn (9-12 år) som bruker gamification for å oppmun
 
 ### 2. Oppgaveadministrasjon
 - **CRUD-operasjoner** - legg til, rediger, slett oppgaver
-- **PIN-beskyttelse** - alle administrative funksjoner krever PIN-kode (5300)
+- **Inline oppretting** - opprett oppgaver direkte i kalenderen
+- **Stjernesystem** - velg poengverdi (1-5 stjerner) visuelt
 - **Dagstildeling** - oppgaver kan tildeles spesifikke dager
 - **Poengtildeling** - sett poengverdi for hver oppgave
 
 ### 3. Oppgavefullføring Workflow
-1. **Barn fullfører oppgave** - klikker "Ferdig!" på en oppgave
-2. **Velger hvem som gjorde den** - Simon eller Noah
-3. **Oppgave går til godkjenning** - vises i Godkjenninger-tab
-4. **Foreldre godkjenner med PIN** - 5300
-5. **Poeng tildeles** - oppdateres i oversikten
-6. **Feiring vises** - 5 sekunders celebration modal
+1. **Barn fullfører oppgave** - klikker "Simon" eller "Noah" på en oppgave
+2. **Oppgave går til godkjenning** - vises i Godkjenninger-tab
+3. **Foreldre godkjenner direkte** - klikk "Godkjenn" eller "Avvis"
+4. **Poeng tildeles** - oppdateres i oversikten
+5. **Feiring vises** - 5 sekunders celebration modal
 
 ### 4. Godkjenning System
 - **Godkjenninger-tab** - viser oppgaver som venter på godkjenning
 - **Badge-notifikasjon** - viser antall ventende godkjenninger
-- **PIN-beskyttelse** - godkjenning krever PIN-kode
-- **Godkjenn/Avvis** - foreldre kan godkjenne eller avvise oppgaver
+- **Direkte godkjenning** - foreldre kan godkjenne eller avvise oppgaver direkte
+- **Visuell feedback** - tydelige knapper med emojis
 
 ### 5. Poengsystem og Tracking
 - **Realtids poengvisning** - øverst på siden for begge barn
+- **Synkronisert poengberegning** - scorecards viser kun poeng fra godkjente oppgaver
 - **Ukesreset** - alle poeng og oppgaver resettes hver mandag kl 00:00
 - **LocalStorage** - poeng lagres mellom sesjoner
+- **Dataintegritet** - poeng beregnes på nytt ved oppstart for konsistens
 - **Visuell feedback** - farger og animasjoner for motivasjon
+- **Forbedret stjernkontrast** - stjerner har bedre synlighet mot gule bakgrunner
 
 ## Teknisk Struktur
 
@@ -66,21 +69,18 @@ weekly-chores/
 ```javascript
 // UI State
 activeTab: "oversikt"           // Aktuell tab
-showChildModal: false           // Child selection modal
-showPinCodeModal: false         // PIN input modal
-showAddTaskModal: false         // Add task modal
-showEditTaskModal: false        // Edit task modal
 showCelebration: false          // Celebration modal
+creatingTaskForDay: null        // Inline task creation state
+newTaskTitle: ""                // New task title input
+newTaskStars: 1                 // New task star rating
 
 // Task Management
 tasks: []                       // Array av oppgaver
 pendingApprovals: []            // Oppgaver som venter på godkjenning
-taskForm: {}                    // Form data for add/edit
 
 // Points System
 simonPoints: 0                  // Simon's poeng
 noahPoints: 0                   // Noah's poeng
-PIN_CODE: "5300"                // Global PIN-kode
 ```
 
 #### Computed Properties
@@ -88,14 +88,15 @@ PIN_CODE: "5300"                // Global PIN-kode
 
 #### Methods
 - `getDayTasks(dayName)` - Henter oppgaver for en spesifikk dag
-- `getDayPoints(dayName)` - Beregner totalt poeng for en dag
-- `completeTask(task)` - Starter oppgavefullføring workflow
-- `selectChild(childName)` - Velger hvem som gjorde oppgaven
+- `getDayPoints(dayName)` - Beregner totalt poeng for en dag (kun godkjente oppgaver)
+- `completeTask(task, childName)` - Fullfører oppgave for spesifikk barn
 - `approveTask(taskId)` - Godkjenner oppgave og tildeler poeng
 - `rejectTask(taskId)` - Avviser oppgave og tilbakestiller den
-- `showPinModal(action, id)` - Viser PIN input modal
-- `verifyPin()` - Verifiserer PIN-kode
-- `showCelebration(childName, points)` - Viser feiring modal
+- `saveNewTask(dayName)` - Lagrer ny oppgave med inline form
+- `cancelTaskCreation()` - Avbryter oppretting av oppgave
+- `selectStars(stars)` - Velger antall stjerner for ny oppgave
+- `displayCelebration(childName, points)` - Viser feiring modal
+- `recalculatePoints()` - Beregner poeng på nytt fra godkjente oppgaver (dataintegritet)
 
 ### CSS Struktur
 
@@ -108,9 +109,10 @@ PIN_CODE: "5300"                // Global PIN-kode
 #### Komponenter
 - `.calendar` - Ukeskalender layout
 - `.task-card` - Individuelle oppgavekort
-- `.modal-overlay` - Modal bakgrunn
 - `.celebration` - Feiring modal
 - `.points-card` - Poengvisning for barn
+- `.star` - Stjernesymboler med forbedret kontrast
+- `.task-creation-form` - Inline oppretting av oppgaver
 
 ### State Management
 
@@ -126,7 +128,7 @@ PIN_CODE: "5300"                // Global PIN-kode
 - Tab badges oppdateres dynamisk
 
 ### Security
-- **PIN-kode beskyttelse** - 5300 for alle administrative funksjoner
+- **Direkte godkjenning** - ingen PIN-kode påkrevd for godkjenning
 - **Client-side validering** - form validering og input sjekking
 - **No server-side** - ren frontend applikasjon
 
@@ -145,24 +147,32 @@ PIN_CODE: "5300"                // Global PIN-kode
 - **Konkurranse** - poengvisning for motivasjon
 
 ### For Foreldre
-- **Administrativ kontroll** - PIN-beskyttede funksjoner
-- **Godkjenning workflow** - kontroll over oppgavegodkjenning
-- **Oversikt** - kalendervisning av alle oppgaver
-- **Poengtracking** - følge barnas fremgang
+- **Administrativ kontroll** - inline oppretting og redigering av oppgaver
+- **Godkjenning workflow** - direkte godkjenning/avvisning av oppgaver
+- **Oversikt** - kalendervisning av alle oppgaver med korrekte poeng
+- **Poengtracking** - følge barnas fremgang med synkroniserte scorecards
 
 ## Utviklingsnotater
 
 ### Design Prinsipper
 - **Tablet-first** - optimalisert for liggende tablet
 - **Touch-friendly** - store knapper og touch targets
-- **Accessibility** - høy kontrast og lesbarhet
+- **Accessibility** - høy kontrast og lesbarhet, forbedret stjernkontrast
 - **Gamification** - poeng, badges, feiring
+- **Data integrity** - synkroniserte poengberegninger
 
 ### Tekniske Valg
 - **Vue.js 3** - moderne reaktivitet og performance
 - **Vanilla CSS** - full kontroll over styling
 - **No build process** - enkel utvikling og deploy
 - **LocalStorage** - persistent state uten backend
+
+### Nylige Forbedringer
+- **Stjernkontrast** - forbedret synlighet av stjerner mot gule bakgrunner
+- **Poengsynkronisering** - scorecards viser kun poeng fra godkjente oppgaver
+- **Dataintegritet** - automatisk reberegning av poeng ved oppstart
+- **Direkte godkjenning** - forenklet godkjenning uten PIN-kode
+- **Inline oppretting** - opprett oppgaver direkte i kalenderen
 
 ### Fremtidige Forbedringer
 - **Backend integrasjon** - persistent lagring
