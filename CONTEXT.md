@@ -138,10 +138,19 @@ noahPoints: 0                   // Noah's poeng
 - **CSS animations** - hardware-accelerated transforms
 - **Minimal dependencies** - kun Vue.js og http-server
 
+### Touch Optimalisering
+- **Touch targets** - alle knapper minst 44x44px (Apple/Google standard)
+- **Touch-action** - manipulation for bedre responsivitet
+- **Tap-highlight** - deaktivert for ren touch-opplevelse
+- **User-select** - deaktivert for å unngå utilsiktet tekstvalg
+- **Touch-callout** - deaktivert for bedre touch-interaksjon
+- **Responsive knapper** - større padding og font-size på touch-enheter
+
 ## Brukeropplevelse
 
 ### For Barn (Simon & Noah)
 - **Engasjerende design** - farger, animasjoner, emojis
+- **Touch-optimalisert** - store knapper (44px+), enkle touch-gestures
 - **Enkel interaksjon** - store knapper, tydelige elementer
 - **Umiddelbar feedback** - feiring når oppgaver godkjennes
 - **Konkurranse** - poengvisning for motivasjon
@@ -156,7 +165,8 @@ noahPoints: 0                   // Noah's poeng
 
 ### Design Prinsipper
 - **Tablet-first** - optimalisert for liggende tablet
-- **Touch-friendly** - store knapper og touch targets
+- **Touch-optimalisert** - alle knapper minst 44px, touch-action: manipulation
+- **Touch-friendly** - store knapper og touch targets, ingen tap-highlight
 - **Accessibility** - høy kontrast og lesbarhet, forbedret stjernkontrast
 - **Gamification** - poeng, badges, feiring
 - **Data integrity** - synkroniserte poengberegninger
