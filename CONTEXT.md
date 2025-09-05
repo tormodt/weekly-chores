@@ -45,6 +45,11 @@ En motivasjonstjeneste for barn (9-12 år) som bruker gamification for å oppmun
 - **Responsive design** - mobile-first tilnærming
 - **Modular struktur** - separerte komponenter for hver funksjonalitet
 
+### Kjøring av Applikasjonen
+- **File System**: Appen kan kjøres direkte fra filsystemet (åpne `index.html` i nettleser)
+- **Local Development**: Bruk `python -m http.server 8000` for lokal utvikling
+- **Produksjon**: Deploy til Vercel eller lignende tjeneste
+
 ### Filstruktur
 ```
 weekly-chores/
