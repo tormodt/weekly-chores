@@ -288,14 +288,15 @@
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, getDocs, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         
-        // Firebase configuration
+        // Firebase configuration from environment variables
         const firebaseConfig = {
-            apiKey: "AIzaSyDDBrcI5dZWgZD2J1ahtY8unYOJOTtcTCE",
-            authDomain: "chores-3cde1.firebaseapp.com",
-            projectId: "chores-3cde1",
-            storageBucket: "chores-3cde1.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890"
+            apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDDBrcI5dZWgZD2J1ahtY8unYOJOTtcTCE",
+            authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "chores-3cde1.firebaseapp.com",
+            projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "chores-3cde1",
+            storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "chores-3cde1.firebasestorage.app",
+            messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "985200279642",
+            appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:985200279642:web:c02591d9ab43eb414dd863",
+            measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-L3C6S2RP58"
         };
         
         // Initialize Firebase
