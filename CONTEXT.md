@@ -49,17 +49,22 @@ En motivasjonstjeneste for barn (9-12 år) som bruker gamification for å oppmun
 - **Modular struktur** - separerte komponenter for hver funksjonalitet
 
 ### Kjøring av Applikasjonen
-- **File System**: Appen kan kjøres direkte fra filsystemet (åpne `index.html` i nettleser)
-- **Local Development**: Bruk `python -m http.server 8000` for lokal utvikling
-- **Produksjon**: Deploy til Vercel eller lignende tjeneste
+- **Local Development**: Bruk `npm start` eller `python -m http.server 8000` for lokal utvikling
+- **GitHub Pages**: Produksjonsdeploy med automatisk CI/CD og custom domain
 
 ### Filstruktur
 ```
 weekly-chores/
-├── index.html          # Hovedapplikasjon med Vue.js
+├── index.html          # Hovedapplikasjon med Vue.js og inline Firebase service
 ├── app.js             # Vue.js app logikk og state management
 ├── styles.css         # CSS styling og animasjoner
-├── package.json       # NPM dependencies
+├── src/
+│   └── app.ts         # TypeScript versjon for utvikling
+├── dist/              # Kompilert TypeScript output
+├── .env.local         # Environment variabler (lokal utvikling)
+├── CNAME              # Custom domain konfigurasjon (oppgaver.ttonnesen.no)
+├── package.json       # NPM dependencies og scripts
+├── tsconfig.json      # TypeScript konfigurasjon
 └── CONTEXT.md         # Denne filen
 ```
 
@@ -116,16 +121,17 @@ noahPoints: 0                   // Noah's poeng
 
 ### State Management
 
-#### LocalStorage
-- `simonPoints` - Simon's poeng
-- `noahPoints` - Noah's poeng
-- `lastReset` - Siste ukesreset dato
+#### Firebase Integration
+- **Real-time sync** - Alle data synkroniseres med Firebase Firestore
+- **Hierarchical structure** - Data organisert som `years/{year}/weeks/{week}/tasks/{taskId}`
+- **Pending approvals** - Separate collection for oppgaver som venter på godkjenning
+- **Points tracking** - Synkronisert poengberegning på tvers av enheter
 
 #### Reactive Data
 - Alle modal states er reactive
-- Task arrays oppdateres automatisk
-- Poeng oppdateres i sanntid
-- Tab badges oppdateres dynamisk
+- Task arrays oppdateres automatisk via Firebase listeners
+- Poeng oppdateres i sanntid fra godkjente oppgaver
+- Tab badges oppdateres dynamisk basert på pending approvals
 
 ### Security
 - **Direkte godkjenning** - ingen PIN-kode påkrevd for godkjenning
@@ -174,10 +180,17 @@ noahPoints: 0                   // Noah's poeng
 ### Tekniske Valg
 - **Vue.js 3** - moderne reaktivitet og performance
 - **Vanilla CSS** - full kontroll over styling
-- **No build process** - enkel utvikling og deploy
-- **LocalStorage** - persistent state uten backend
+- **Firebase Firestore** - real-time database med offline support
+- **GitHub Pages** - enkel deploy med custom domain
+- **TypeScript support** - type safety for utvikling
+- **Web server required** - krever lokal server for utvikling
 
 ### Nylige Forbedringer
+- **Firebase integrasjon** - real-time sync og persistent lagring
+- **GitHub Pages deploy** - automatisk CI/CD med custom domain
+- **TypeScript support** - type safety og bedre utvikleropplevelse
+- **Environment variables** - sikker konfigurasjon for produksjon
+- **Web server compatibility** - krever lokal server for utvikling
 - **Stjernkontrast** - forbedret synlighet av stjerner mot gule bakgrunner
 - **Poengsynkronisering** - scorecards viser kun poeng fra godkjente oppgaver
 - **Dataintegritet** - automatisk reberegning av poeng ved oppstart
@@ -185,7 +198,8 @@ noahPoints: 0                   // Noah's poeng
 - **Inline oppretting** - opprett oppgaver direkte i kalenderen
 
 ### Fremtidige Forbedringer
-- **Backend integrasjon** - persistent lagring
 - **Multi-user support** - flere familier
 - **Advanced analytics** - detaljert rapportering
 - **Mobile app** - native applikasjon
+- **Offline support** - arbeid uten internettforbindelse
+- **Push notifications** - påminnelser om oppgaver
