@@ -15,59 +15,39 @@ A gamified weekly chores app for kids, built with Vue.js and Firebase. Features 
 
 ### Environment Variables
 
-This project uses Firebase for data storage. You need to set up environment variables for the Firebase configuration.
+This project uses Firebase for data storage. Environment variables are configured directly in the `.env` file for web server deployment.
 
-#### Local Development
-
-1. Create `.env.local` file with your Firebase configuration:
-   ```bash
-   # Firebase Configuration
-   VITE_FIREBASE_API_KEY=your_api_key_here
-   VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_project_id.firebasestorage.app
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
-   VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-   ```
-
-#### GitHub Pages Deployment
+### GitHub Pages Deployment
 
 1. **Set up GitHub Pages:**
    - Go to your repository Settings → Pages
    - Select "Deploy from a branch" → "main" branch
    - Choose "/ (root)" as the source
 
-2. **Set environment variables:**
-   - Go to Settings → Secrets and variables → Actions
-   - Add the following repository secrets:
-     - `VITE_FIREBASE_API_KEY`
-     - `VITE_FIREBASE_AUTH_DOMAIN`
-     - `VITE_FIREBASE_PROJECT_ID`
-     - `VITE_FIREBASE_STORAGE_BUCKET`
-     - `VITE_FIREBASE_MESSAGING_SENDER_ID`
-     - `VITE_FIREBASE_APP_ID`
-     - `VITE_FIREBASE_MEASUREMENT_ID`
-
-3. **Custom Domain (Optional):**
+2. **Custom Domain (Optional):**
    - The `CNAME` file is already configured for `oppgaver.ttonnesen.no`
    - Update your DNS settings to point to your GitHub Pages URL
 
-### Running Locally
+### Running the Application
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Start a local server:
+1. **Start local web server:**
    ```bash
    npm start
-   # or
-   python -m http.server 8000
    ```
 
-3. Open `http://localhost:3000` (or the port shown in terminal) in your browser
+2. **Build the project:**
+   ```bash
+   npm run build
+   ```
+
+3. **Deploy to GitHub Pages:**
+   ```bash
+   npm run deploy
+   ```
+
+4. **Access the application:**
+   - Local: `http://localhost:3000`
+   - Production: Visit your GitHub Pages URL or custom domain
 
 ## Project Structure
 
@@ -76,9 +56,8 @@ This project uses Firebase for data storage. You need to set up environment vari
 ├── app.js             # Vue.js application logic
 ├── styles.css         # Application styling
 ├── src/
-│   └── app.ts         # TypeScript version (for development)
-├── dist/              # Compiled TypeScript output
-├── .env.local         # Environment variables (local development)
+│   └── app.ts         # TypeScript source code
+├── .env               # Environment variables for web deployment
 ├── CNAME              # Custom domain configuration
 ├── package.json       # Dependencies and scripts
 └── tsconfig.json      # TypeScript configuration
@@ -89,23 +68,22 @@ This project uses Firebase for data storage. You need to set up environment vari
 - **Frontend:** Vue.js 3, Vanilla CSS
 - **Backend:** Firebase Firestore
 - **Deployment:** GitHub Pages
-- **Development:** TypeScript support available
+- **Build:** TypeScript compilation
 
 ## Security
 
-- Environment variables are loaded from `.env.local` for local development
-- `.env.local` is gitignored to prevent committing secrets
-- Production secrets are set in GitHub repository settings
-- Never commit actual Firebase credentials to the repository
+- Environment variables are configured in `.env` file for web deployment
+- Firebase credentials are embedded in the deployed application
+- All data is stored securely in Firebase Firestore
 
 ## Development
 
 ### TypeScript Support
 The project includes TypeScript definitions in `src/app.ts`. To compile:
 ```bash
-npx tsc
+npm run build
 ```
 
-### Development vs Production
-- **Local Development:** Use `npm start` for development with environment variables
-- **GitHub Pages:** Production deployment with environment variables from repository settings
+### Web Server Deployment
+- **GitHub Pages:** Production deployment with embedded environment variables
+- **Custom Domain:** Configured for `oppgaver.ttonnesen.no`

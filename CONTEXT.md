@@ -49,7 +49,7 @@ En motivasjonstjeneste for barn (9-12 år) som bruker gamification for å oppmun
 - **Modular struktur** - separerte komponenter for hver funksjonalitet
 
 ### Kjøring av Applikasjonen
-- **Local Development**: Bruk `npm start` eller `python -m http.server 8000` for lokal utvikling
+- **Web Server Only**: Applikasjonen er designet for å kjøre kun på webserver
 - **GitHub Pages**: Produksjonsdeploy med automatisk CI/CD og custom domain
 
 ### Filstruktur
@@ -59,9 +59,8 @@ weekly-chores/
 ├── app.js             # Vue.js app logikk og state management
 ├── styles.css         # CSS styling og animasjoner
 ├── src/
-│   └── app.ts         # TypeScript versjon for utvikling
-├── dist/              # Kompilert TypeScript output
-├── .env.local         # Environment variabler (lokal utvikling)
+│   └── app.ts         # TypeScript kildekode
+├── .env               # Environment variabler for web deployment
 ├── CNAME              # Custom domain konfigurasjon (oppgaver.ttonnesen.no)
 ├── package.json       # NPM dependencies og scripts
 ├── tsconfig.json      # TypeScript konfigurasjon
@@ -183,14 +182,14 @@ noahPoints: 0                   // Noah's poeng
 - **Firebase Firestore** - real-time database med offline support
 - **GitHub Pages** - enkel deploy med custom domain
 - **TypeScript support** - type safety for utvikling
-- **Web server required** - krever lokal server for utvikling
+- **Web server deployment** - designet for webserver-kjøring kun
 
 ### Nylige Forbedringer
 - **Firebase integrasjon** - real-time sync og persistent lagring
 - **GitHub Pages deploy** - automatisk CI/CD med custom domain
 - **TypeScript support** - type safety og bedre utvikleropplevelse
-- **Environment variables** - sikker konfigurasjon for produksjon
-- **Web server compatibility** - krever lokal server for utvikling
+- **Environment variables** - sikker konfigurasjon for web deployment
+- **Web server only** - optimalisert for webserver-kjøring
 - **Stjernkontrast** - forbedret synlighet av stjerner mot gule bakgrunner
 - **Poengsynkronisering** - scorecards viser kun poeng fra godkjente oppgaver
 - **Dataintegritet** - automatisk reberegning av poeng ved oppstart
