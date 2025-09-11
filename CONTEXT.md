@@ -56,16 +56,22 @@ En motivasjonstjeneste for barn (9-12 år) som bruker gamification for å oppmun
 ```
 weekly-chores/
 ├── index.html          # Hovedapplikasjon med Vue.js og inline Firebase service
-├── app.js             # Vue.js app logikk og state management
+├── app.js             # Kompilert JavaScript fra TypeScript (generert automatisk)
+├── app.d.ts           # TypeScript deklarasjoner (generert automatisk)
 ├── styles.css         # CSS styling og animasjoner
 ├── src/
-│   └── app.ts         # TypeScript kildekode
+│   └── app.ts         # TypeScript kildekode (HOVEDKILDE)
 ├── .env               # Environment variabler for web deployment
 ├── CNAME              # Custom domain konfigurasjon (oppgaver.ttonnesen.no)
 ├── package.json       # NPM dependencies og scripts
 ├── tsconfig.json      # TypeScript konfigurasjon
 └── CONTEXT.md         # Denne filen
 ```
+
+**VIKTIG: Dette prosjektet bruker KUN TypeScript!**
+- `src/app.ts` er den eneste kildefilen som skal redigeres
+- `app.js` genereres automatisk fra TypeScript og skal IKKE redigeres direkte
+- All logikk og funksjonalitet skal implementeres i TypeScript
 
 ### Vue.js App Struktur
 
@@ -181,8 +187,16 @@ noahPoints: 0                   // Noah's poeng
 - **Vanilla CSS** - full kontroll over styling
 - **Firebase Firestore** - real-time database med offline support
 - **GitHub Pages** - enkel deploy med custom domain
-- **TypeScript support** - type safety for utvikling
+- **TypeScript ONLY** - type safety og bedre utvikleropplevelse
 - **Web server deployment** - designet for webserver-kjøring kun
+
+### TypeScript Utviklingsworkflow
+1. **Rediger kun `src/app.ts`** - dette er den eneste kildefilen
+2. **Kompiler med `npx tsc`** - genererer `app.js` og `app.d.ts`
+3. **Test applikasjonen** - `npm start` for å kjøre lokalt
+4. **Deploy til GitHub Pages** - `npm run deploy` for produksjon
+
+**ALDRIG rediger `app.js` direkte** - den overskrives ved hver TypeScript-kompilering!
 
 ### Nylige Forbedringer
 - **Firebase integrasjon** - real-time sync og persistent lagring

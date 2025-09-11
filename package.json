@@ -4,9 +4,10 @@
   "description": "Weekly chores app - Web server deployment only",
   "main": "index.html",
   "scripts": {
-    "start": "npx http-server . -p 3000 -o",
+    "start": "npx tsc && npx http-server . -p 3000 -o",
     "build": "npx tsc",
-    "deploy": "git add . && git commit -m 'Deploy to GitHub Pages' && git push"
+    "dev": "npx tsc --watch",
+    "deploy": "npx tsc && git add . && git commit -m 'Deploy to GitHub Pages' && git push"
   },
   "dependencies": {
     "vue": "^3.5.21"
