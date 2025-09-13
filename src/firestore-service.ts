@@ -38,7 +38,9 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 1);
     const days = Math.floor((now.getTime() - start.getTime()) / (24 * 60 * 60 * 1000));
-    return Math.ceil((days + start.getDay() + 1) / 7);
+    const weekNumber = Math.ceil((days + start.getDay() + 1) / 7);
+    console.log('📅 FirestoreService week calculation - Date:', now, 'Start of year:', start, 'Days since start:', days, 'Start day of year:', start.getDay(), 'Calculated week:', weekNumber);
+    return weekNumber;
   }
 
   async addTask(task: Omit<Task, 'id'>): Promise<Task> {
@@ -182,14 +184,68 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
       const year = new Date().getFullYear();
       const week = this.getCurrentWeekNumber();
       
+      console.log('📡 Setting up task subscription for year:', year, 'week:', week);
+      console.log('📡 Collection path: years/${year}/weeks/${week}/tasks');
+      
       const tasksRef = firebaseUtils.collection(this.db, `years/${year}/weeks/${week}/tasks`);
+      console.log('📡 Tasks reference created:', tasksRef);
+      
       firebaseUtils.onSnapshot(tasksRef, (snapshot: any) => {
-        const tasks = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as Task));
-        console.log('📡 Received tasks from Firestore:', tasks);
+        console.log('📡 Firestore snapshot received:', snapshot);
+        console.log('📡 Snapshot size:', snapshot.size);
+        console.log('📡 Snapshot empty:', snapshot.empty);
+        console.log('📡 Snapshot docs:', snapshot.docs);
+        
+        const tasks = snapshot.docs.map((doc: any) => {
+          const taskData = { id: doc.id, ...doc.data() };
+          console.log('📡 Mapped task:', taskData);
+          return taskData as Task;
+        });
+        
+        console.log('📡 Final tasks array:', tasks);
         callback(tasks);
+      }, (error: any) => {
+        console.error('❌ Firestore subscription error:', error);
       });
     } catch (error) {
       console.error('❌ Error setting up task subscription:', error);
+      throw error;
+    }
+  }
+
+  async subscribeToTasksForWeek(year: number, week: number, callback: (tasks: Task[]) => void): Promise<void> {
+    await this.initPromise;
+    
+    if (!this.initialized) {
+      throw new Error('Firebase not initialized');
+    }
+
+    try {
+      console.log('📡 Setting up task subscription for year:', year, 'week:', week);
+      console.log('📡 Collection path: years/${year}/weeks/${week}/tasks');
+      
+      const tasksRef = firebaseUtils.collection(this.db, `years/${year}/weeks/${week}/tasks`);
+      console.log('📡 Tasks reference created:', tasksRef);
+      
+      firebaseUtils.onSnapshot(tasksRef, (snapshot: any) => {
+        console.log('📡 Firestore snapshot received for week', week, ':', snapshot);
+        console.log('📡 Snapshot size:', snapshot.size);
+        console.log('📡 Snapshot empty:', snapshot.empty);
+        console.log('📡 Snapshot docs:', snapshot.docs);
+        
+        const tasks = snapshot.docs.map((doc: any) => {
+          const taskData = { id: doc.id, ...doc.data() };
+          console.log('📡 Mapped task from week', week, ':', taskData);
+          return taskData as Task;
+        });
+        
+        console.log('📡 Final tasks array for week', week, ':', tasks);
+        callback(tasks);
+      }, (error: any) => {
+        console.error('❌ Firestore subscription error for week', week, ':', error);
+      });
+    } catch (error) {
+      console.error('❌ Error setting up task subscription for week', week, ':', error);
       throw error;
     }
   }

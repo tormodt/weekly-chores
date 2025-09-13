@@ -32,6 +32,7 @@ export interface SimpleFirestoreService {
   updateTask(taskId: string, updates: Partial<Task>): Promise<boolean>;
   deleteTask(taskId: string): Promise<boolean>;
   subscribeToTasks(callback: (tasks: Task[]) => void): Promise<void>;
+  subscribeToTasksForWeek(year: number, week: number, callback: (tasks: Task[]) => void): Promise<void>;
   addPendingApproval(approval: Omit<PendingApproval, 'id'>): Promise<PendingApproval>;
   removePendingApproval(approvalId: string): Promise<boolean>;
   subscribeToPendingApprovals(callback: (approvals: PendingApproval[]) => void): Promise<void>;
