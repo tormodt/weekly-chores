@@ -12,7 +12,7 @@ export interface Task {
   completedBy?: string;
   completedAt?: Date;
   approvedAt?: Date;
-  recurring?: boolean;
+  recurringTaskId?: string; // Reference to original recurring task
   createdAt?: Date;
   updatedAt?: Date;
 }
