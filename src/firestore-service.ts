@@ -14,6 +14,7 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
   }
 
   async initialize(): Promise<boolean> {
+    console.log('🔍 Initializing Firebase service...');
     
     // Wait for Firebase to be available
     let attempts = 0;
@@ -23,11 +24,14 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
     }
     
     if (window.firebase) {
+      console.log('✅ Firebase found, initializing database connection...');
       this.db = window.firebase.db;
       this.initialized = true;
+      console.log('✅ Firebase service initialized successfully');
       return true;
     } else {
       console.error('❌ Firebase failed to initialize after 10 seconds');
+      console.error('Available window properties:', Object.keys(window));
       return false;
     }
   }
@@ -307,10 +311,12 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
     await this.initPromise;
     
     if (!this.initialized) {
+      console.error('❌ Firebase not initialized');
       return false;
     }
 
     try {
+      console.log('🔍 Testing Firebase connection...');
       
       const testDoc = {
         test: true,
@@ -323,15 +329,23 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
         testDoc
       );
       
+      console.log('✅ Test document created successfully');
       
       // Clean up
       await firebaseUtils.deleteDoc(
         firebaseUtils.doc(this.db, 'test', docRef.id)
       );
       
+      console.log('✅ Test document cleaned up successfully');
       return true;
     } catch (error) {
       console.error('❌ Firestore connection test failed:', error);
+      console.error('Error details:', {
+        name: (error as any)?.name,
+        message: (error as any)?.message,
+        code: (error as any)?.code,
+        stack: (error as any)?.stack
+      });
       return false;
     }
   }

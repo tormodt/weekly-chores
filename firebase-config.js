@@ -14,8 +14,18 @@ const firebaseConfig = {
     measurementId: "G-L3C6S2RP58"
 };
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+console.log('🔍 Initializing Firebase with config:', firebaseConfig);
+let app, db;
+try {
+    app = initializeApp(firebaseConfig);
+    console.log('✅ Firebase app initialized:', app);
+    db = getFirestore(app);
+    console.log('✅ Firestore database initialized:', db);
+}
+catch (error) {
+    console.error('❌ Firebase initialization failed:', error);
+    throw error;
+}
 // Export Firebase utilities
 export const firebaseUtils = {
     db,
@@ -34,5 +44,4 @@ export const firebaseUtils = {
 // Initialize global Firebase reference
 window.firebase = firebaseUtils;
 window.firebaseReady = true;
-console.log('Firebase SDK loaded and ready');
 //# sourceMappingURL=firebase-config.js.map
