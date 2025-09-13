@@ -27,6 +27,15 @@ export interface PendingApproval {
   createdAt?: Date;
 }
 
+export interface RecurringTask {
+  id: string;
+  title: string;
+  points: number;
+  day: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface SimpleFirestoreService {
   addTask(task: Omit<Task, 'id'>): Promise<Task>;
   updateTask(taskId: string, updates: Partial<Task>): Promise<boolean>;
@@ -39,6 +48,12 @@ export interface SimpleFirestoreService {
   updatePoints(simonPoints: number, noahPoints: number): Promise<boolean>;
   testConnection(): Promise<boolean>;
   getTasksForWeek?(year: number, week: number): Promise<Task[]>;
+  // Recurring tasks methods
+  addRecurringTask(task: Omit<RecurringTask, 'id'>): Promise<RecurringTask>;
+  updateRecurringTask(taskId: string, updates: Partial<RecurringTask>): Promise<boolean>;
+  deleteRecurringTask(taskId: string): Promise<boolean>;
+  getRecurringTasks(): Promise<RecurringTask[]>;
+  subscribeToRecurringTasks(callback: (tasks: RecurringTask[]) => void): Promise<void>;
 }
 
 // Global window interface extensions

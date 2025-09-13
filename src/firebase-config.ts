@@ -49,4 +49,3 @@ declare global {
 (window as any).firebase = firebaseUtils;
 (window as any).firebaseReady = true;
 
-console.log('Firebase SDK loaded and ready');
