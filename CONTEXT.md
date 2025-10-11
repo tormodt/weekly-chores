@@ -51,27 +51,41 @@ En motivasjonstjeneste for barn (9-12 år) som bruker gamification for å oppmun
 ### Kjøring av Applikasjonen
 - **Web Server Only**: Applikasjonen er designet for å kjøre kun på webserver
 - **GitHub Pages**: Produksjonsdeploy med automatisk CI/CD og custom domain
+- **GitHub Actions**: Automatisk TypeScript-kompilering og deployment ved hver push til main
 
 ### Filstruktur
 ```
 weekly-chores/
-├── index.html          # Hovedapplikasjon med Vue.js og inline Firebase service
-├── app.js             # Kompilert JavaScript fra TypeScript (generert automatisk)
-├── app.d.ts           # TypeScript deklarasjoner (generert automatisk)
-├── styles.css         # CSS styling og animasjoner
+├── index.html              # Hovedapplikasjon med Vue.js og Firebase service
+├── app.js                  # Kompilert JavaScript fra TypeScript (generert automatisk)
+├── firestore-service.js    # Kompilert Firebase service (generert automatisk)
+├── firebase-config.js      # Kompilert Firebase config (generert automatisk)
+├── firebase-types.js       # Kompilert type definitions (generert automatisk)
+├── app.d.ts               # TypeScript deklarasjoner (generert automatisk)
+├── firestore-service.d.ts # Firebase service deklarasjoner (generert automatisk)
+├── firebase-config.d.ts    # Firebase config deklarasjoner (generert automatisk)
+├── firebase-types.d.ts     # Type definitions deklarasjoner (generert automatisk)
+├── styles.css             # CSS styling og animasjoner
 ├── src/
-│   └── app.ts         # TypeScript kildekode (HOVEDKILDE)
-├── .env               # Environment variabler for web deployment
-├── CNAME              # Custom domain konfigurasjon (oppgaver.ttonnesen.no)
-├── package.json       # NPM dependencies og scripts
-├── tsconfig.json      # TypeScript konfigurasjon
-└── CONTEXT.md         # Denne filen
+│   ├── app.ts             # TypeScript kildekode (HOVEDKILDE)
+│   ├── firestore-service.ts # Firebase service TypeScript
+│   ├── firebase-config.ts  # Firebase configuration TypeScript
+│   └── firebase-types.ts   # TypeScript type definitions
+├── .github/
+│   └── workflows/
+│       └── deploy.yml     # GitHub Actions deployment workflow
+├── .env                   # Environment variabler for web deployment
+├── CNAME                  # Custom domain konfigurasjon (oppgaver.ttonnesen.no)
+├── package.json           # NPM dependencies og scripts
+├── tsconfig.json          # TypeScript konfigurasjon
+└── CONTEXT.md             # Denne filen
 ```
 
 **VIKTIG: Dette prosjektet bruker KUN TypeScript!**
-- `src/app.ts` er den eneste kildefilen som skal redigeres
-- `app.js` genereres automatisk fra TypeScript og skal IKKE redigeres direkte
+- `src/` mappen inneholder alle TypeScript kildefiler som skal redigeres
+- Alle `.js` filer genereres automatisk fra TypeScript og skal IKKE redigeres direkte
 - All logikk og funksjonalitet skal implementeres i TypeScript
+- GitHub Actions kompilerer automatisk TypeScript ved hver push til main
 
 ### Vue.js App Struktur
 
@@ -191,16 +205,16 @@ noahPoints: 0                   // Noah's poeng
 - **Web server deployment** - designet for webserver-kjøring kun
 
 ### TypeScript Utviklingsworkflow
-1. **Rediger kun `src/app.ts`** - dette er den eneste kildefilen
-2. **Kompiler med `npx tsc`** - genererer `app.js` og `app.d.ts`
-3. **Test applikasjonen** - `npm start` for å kjøre lokalt
-4. **Deploy til GitHub Pages** - `npm run deploy` for produksjon
+1. **Rediger kun filer i `src/`** - dette er de eneste kildefilene
+2. **Test lokalt:** `npm run dev` for watch mode eller `npm start` for lokal server
+3. **Deploy til produksjon:** `git push origin main` - GitHub Actions håndterer resten
+4. **Automatisk kompilering:** TypeScript kompileres automatisk ved hver push til main
 
-**ALDRIG rediger `app.js` direkte** - den overskrives ved hver TypeScript-kompilering!
+**ALDRIG rediger `.js` filer direkte** - de overskrives ved hver TypeScript-kompilering!
 
 ### Nylige Forbedringer
 - **Firebase integrasjon** - real-time sync og persistent lagring
-- **GitHub Pages deploy** - automatisk CI/CD med custom domain
+- **GitHub Actions CI/CD** - automatisk TypeScript-kompilering og deployment
 - **TypeScript support** - type safety og bedre utvikleropplevelse
 - **Environment variables** - sikker konfigurasjon for web deployment
 - **Web server only** - optimalisert for webserver-kjøring
@@ -209,6 +223,7 @@ noahPoints: 0                   // Noah's poeng
 - **Dataintegritet** - automatisk reberegning av poeng ved oppstart
 - **Direkte godkjenning** - forenklet godkjenning uten PIN-kode
 - **Inline oppretting** - opprett oppgaver direkte i kalenderen
+- **Automatisk deployment** - ingen manuell deploy nødvendig
 
 ### Fremtidige Forbedringer
 - **Multi-user support** - flere familier

@@ -19,71 +19,101 @@ This project uses Firebase for data storage. Environment variables are configure
 
 ### GitHub Pages Deployment
 
-1. **Set up GitHub Pages:**
-   - Go to your repository Settings → Pages
-   - Select "Deploy from a branch" → "main" branch
-   - Choose "/ (root)" as the source
+**Automatic Deployment with GitHub Actions**
 
-2. **Custom Domain (Optional):**
-   - The `CNAME` file is already configured for `oppgaver.ttonnesen.no`
+The project uses GitHub Actions for automatic TypeScript compilation and deployment:
+
+1. **GitHub Actions Workflow:**
+   - Automatically compiles TypeScript on every push to `main`
+   - Deploys compiled files to GitHub Pages
+   - No manual deployment needed
+
+2. **Set up GitHub Pages:**
+   - Go to your repository Settings → Pages
+   - Select "GitHub Actions" as the source
+   - The workflow will handle deployment automatically
+
+3. **Custom Domain:**
+   - The `CNAME` file is configured for `oppgaver.ttonnesen.no`
    - Update your DNS settings to point to your GitHub Pages URL
 
 ### Running the Application
 
-1. **Start local web server:**
+1. **Start local development server:**
    ```bash
    npm start
    ```
 
-2. **Build the project:**
+2. **Build TypeScript (for local testing):**
    ```bash
    npm run build
    ```
 
-3. **Deploy to GitHub Pages:**
+3. **Watch mode for development:**
    ```bash
-   npm run deploy
+   npm run dev
    ```
 
-4. **Access the application:**
+4. **Deploy to production:**
+   - Simply push changes to `main` branch
+   - GitHub Actions will automatically compile and deploy
+
+5. **Access the application:**
    - Local: `http://localhost:3000`
-   - Production: Visit your GitHub Pages URL or custom domain
+   - Production: `https://oppgaver.ttonnesen.no`
 
 ## Project Structure
 
 ```
-├── index.html          # Main application entry point
-├── app.js             # Vue.js application logic
-├── styles.css         # Application styling
+weekly-chores/
+├── index.html              # Main application entry point
+├── app.js                  # Compiled Vue.js application (auto-generated)
+├── firestore-service.js    # Compiled Firebase service (auto-generated)
+├── firebase-config.js      # Compiled Firebase config (auto-generated)
+├── firebase-types.js       # Compiled type definitions (auto-generated)
+├── styles.css             # Application styling
 ├── src/
-│   └── app.ts         # TypeScript source code
-├── .env               # Environment variables for web deployment
-├── CNAME              # Custom domain configuration
-├── package.json       # Dependencies and scripts
-└── tsconfig.json      # TypeScript configuration
+│   ├── app.ts             # Main TypeScript source code
+│   ├── firestore-service.ts # Firebase service TypeScript
+│   ├── firebase-config.ts  # Firebase configuration TypeScript
+│   └── firebase-types.ts   # TypeScript type definitions
+├── .github/
+│   └── workflows/
+│       └── deploy.yml     # GitHub Actions deployment workflow
+├── .env                   # Environment variables for web deployment
+├── CNAME                  # Custom domain configuration (oppgaver.ttonnesen.no)
+├── package.json           # Dependencies and scripts
+└── tsconfig.json          # TypeScript configuration
 ```
 
 ## Technology Stack
 
 - **Frontend:** Vue.js 3, Vanilla CSS
 - **Backend:** Firebase Firestore
-- **Deployment:** GitHub Pages
-- **Build:** TypeScript compilation
-
-## Security
-
-- Environment variables are configured in `.env` file for web deployment
-- Firebase credentials are embedded in the deployed application
-- All data is stored securely in Firebase Firestore
+- **Deployment:** GitHub Pages with GitHub Actions
+- **Build:** TypeScript compilation (automated)
+- **CI/CD:** GitHub Actions workflow
 
 ## Development
 
-### TypeScript Support
-The project includes TypeScript definitions in `src/app.ts`. To compile:
-```bash
-npm run build
-```
+### TypeScript Development Workflow
 
-### Web Server Deployment
-- **GitHub Pages:** Production deployment with embedded environment variables
-- **Custom Domain:** Configured for `oppgaver.ttonnesen.no`
+1. **Edit TypeScript files** in the `src/` directory
+2. **Test locally:**
+   ```bash
+   npm run dev    # Watch mode for development
+   npm start      # Build and serve locally
+   ```
+3. **Deploy to production:**
+   ```bash
+   git add .
+   git commit -m "Your changes"
+   git push origin main
+   ```
+   - GitHub Actions automatically compiles TypeScript and deploys
+
+### Important Notes
+
+- **Never edit `.js` files directly** - they are auto-generated from TypeScript
+- **Only edit files in `src/`** - these are the source files
+- **Compiled files are tracked in Git** - needed for GitHub Pages deployment
