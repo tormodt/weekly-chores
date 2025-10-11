@@ -8,10 +8,14 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# TypeScript generated files
-*.js
+# TypeScript generated files (keep compiled files for deployment)
+# *.js
+# *.js.map
+# *.d.ts
+# *.d.ts.map
+
+# Only ignore source maps and development files
 *.js.map
-*.d.ts
 *.d.ts.map
 
 # Build outputs
