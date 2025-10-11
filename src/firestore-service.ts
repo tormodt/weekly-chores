@@ -65,9 +65,14 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
         updatedAt: new Date()
       };
       
+      // Remove undefined values (Firestore doesn't allow undefined)
+      const cleanTaskData = Object.fromEntries(
+        Object.entries(taskData).filter(([_, value]) => value !== undefined)
+      );
+      
       const docRef = await firebaseUtils.addDoc(
         firebaseUtils.collection(this.db, `years/${year}/weeks/${week}/tasks`), 
-        taskData
+        cleanTaskData
       );
       
       return { id: docRef.id, ...taskData, year, week };
@@ -94,10 +99,16 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
       }
       
       const docRef = firebaseUtils.doc(this.db, `years/${task.year}/weeks/${task.week}/tasks`, taskId);
-      await firebaseUtils.updateDoc(docRef, {
-        ...updates,
-        updatedAt: new Date()
-      });
+      
+      // Remove undefined values (Firestore doesn't allow undefined)
+      const cleanUpdates = Object.fromEntries(
+        Object.entries({
+          ...updates,
+          updatedAt: new Date()
+        }).filter(([_, value]) => value !== undefined)
+      );
+      
+      await firebaseUtils.updateDoc(docRef, cleanUpdates);
       
       return true;
     } catch (error) {
