@@ -65,9 +65,9 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
         updatedAt: new Date()
       };
       
-      // Remove undefined values (Firestore doesn't allow undefined)
+      // Convert undefined values to null (Firestore doesn't allow undefined)
       const cleanTaskData = Object.fromEntries(
-        Object.entries(taskData).filter(([_, value]) => value !== undefined)
+        Object.entries(taskData).map(([key, value]) => [key, value === undefined ? null : value])
       );
       
       const docRef = await firebaseUtils.addDoc(
@@ -100,12 +100,12 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
       
       const docRef = firebaseUtils.doc(this.db, `years/${task.year}/weeks/${task.week}/tasks`, taskId);
       
-      // Remove undefined values (Firestore doesn't allow undefined)
+      // Convert undefined values to null (Firestore doesn't allow undefined)
       const cleanUpdates = Object.fromEntries(
         Object.entries({
           ...updates,
           updatedAt: new Date()
-        }).filter(([_, value]) => value !== undefined)
+        }).map(([key, value]) => [key, value === undefined ? null : value])
       );
       
       await firebaseUtils.updateDoc(docRef, cleanUpdates);
@@ -170,7 +170,24 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
     try {
       const tasksRef = firebaseUtils.collection(this.db, `years/${year}/weeks/${week}/tasks`);
       const snapshot = await firebaseUtils.getDocs(tasksRef);
-      return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as Task));
+      return snapshot.docs.map((doc: any) => {
+        const data = doc.data();
+        // Convert Firestore Timestamps to JavaScript Dates
+        const taskData = { id: doc.id, ...data };
+        if (data.completedAt && data.completedAt.toDate) {
+          taskData.completedAt = data.completedAt.toDate();
+        }
+        if (data.approvedAt && data.approvedAt.toDate) {
+          taskData.approvedAt = data.approvedAt.toDate();
+        }
+        if (data.createdAt && data.createdAt.toDate) {
+          taskData.createdAt = data.createdAt.toDate();
+        }
+        if (data.updatedAt && data.updatedAt.toDate) {
+          taskData.updatedAt = data.updatedAt.toDate();
+        }
+        return taskData as Task;
+      });
     } catch (error) {
       console.error('❌ Error getting tasks for week:', error);
       return [];
@@ -194,7 +211,21 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
       firebaseUtils.onSnapshot(tasksRef, (snapshot: any) => {
         
         const tasks = snapshot.docs.map((doc: any) => {
-          const taskData = { id: doc.id, ...doc.data() };
+          const data = doc.data();
+          // Convert Firestore Timestamps to JavaScript Dates
+          const taskData = { id: doc.id, ...data };
+          if (data.completedAt && data.completedAt.toDate) {
+            taskData.completedAt = data.completedAt.toDate();
+          }
+          if (data.approvedAt && data.approvedAt.toDate) {
+            taskData.approvedAt = data.approvedAt.toDate();
+          }
+          if (data.createdAt && data.createdAt.toDate) {
+            taskData.createdAt = data.createdAt.toDate();
+          }
+          if (data.updatedAt && data.updatedAt.toDate) {
+            taskData.updatedAt = data.updatedAt.toDate();
+          }
           return taskData as Task;
         });
         
@@ -221,7 +252,21 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
       firebaseUtils.onSnapshot(tasksRef, (snapshot: any) => {
         
         const tasks = snapshot.docs.map((doc: any) => {
-          const taskData = { id: doc.id, ...doc.data() };
+          const data = doc.data();
+          // Convert Firestore Timestamps to JavaScript Dates
+          const taskData = { id: doc.id, ...data };
+          if (data.completedAt && data.completedAt.toDate) {
+            taskData.completedAt = data.completedAt.toDate();
+          }
+          if (data.approvedAt && data.approvedAt.toDate) {
+            taskData.approvedAt = data.approvedAt.toDate();
+          }
+          if (data.createdAt && data.createdAt.toDate) {
+            taskData.createdAt = data.createdAt.toDate();
+          }
+          if (data.updatedAt && data.updatedAt.toDate) {
+            taskData.updatedAt = data.updatedAt.toDate();
+          }
           return taskData as Task;
         });
         
