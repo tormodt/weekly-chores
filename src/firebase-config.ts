@@ -4,15 +4,15 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebas
 // @ts-ignore - Firebase SDK from CDN
 import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, getDocs, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// Firebase configuration
+// Firebase configuration from environment variables
 const firebaseConfig = {
-    apiKey: "AIzaSyDDBrcI5dZWgZD2J1ahtY8unYOJOTtcTCE",
-    authDomain: "chores-3cde1.firebaseapp.com",
-    projectId: "chores-3cde1",
-    storageBucket: "chores-3cde1.firebasestorage.app",
-    messagingSenderId: "985200279642",
-    appId: "1:985200279642:web:c02591d9ab43eb414dd863",
-    measurementId: "G-L3C6S2RP58"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
