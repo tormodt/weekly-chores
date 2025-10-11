@@ -331,7 +331,18 @@ export class SimpleFirestoreService implements ISimpleFirestoreService {
     try {
       const approvalsRef = firebaseUtils.collection(this.db, 'pendingApprovals');
       firebaseUtils.onSnapshot(approvalsRef, (snapshot: any) => {
-        const approvals = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as PendingApproval));
+        const approvals = snapshot.docs.map((doc: any) => {
+          const data = doc.data();
+          // Convert Firestore Timestamps to JavaScript Dates
+          const approvalData = { id: doc.id, ...data };
+          if (data.completedAt && data.completedAt.toDate) {
+            approvalData.completedAt = data.completedAt.toDate();
+          }
+          if (data.createdAt && data.createdAt.toDate) {
+            approvalData.createdAt = data.createdAt.toDate();
+          }
+          return approvalData as PendingApproval;
+        });
         callback(approvals);
       });
     } catch (error) {
