@@ -15,7 +15,51 @@ A gamified weekly chores app for kids, built with Vue.js and Firebase. Features 
 
 ### Environment Variables
 
-This project uses Firebase for data storage. Environment variables are configured directly in the `.env` file for web server deployment.
+This project uses Firebase for data storage. Environment variables are configured for both local development and production deployment.
+
+#### Local Development
+
+1. **Copy the environment template:**
+   ```bash
+   cp env.example .env
+   ```
+
+2. **Fill in your Firebase configuration:**
+   - Open `.env` file
+   - Replace the placeholder values with your actual Firebase project details
+   - Get these values from your Firebase project settings (Project Settings → General → Your apps)
+
+3. **Required Firebase environment variables:**
+   ```
+   FIREBASE_API_KEY=your_firebase_api_key_here
+   FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+   FIREBASE_PROJECT_ID=your_project_id_here
+   FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+   FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id_here
+   FIREBASE_APP_ID=your_app_id_here
+   FIREBASE_MEASUREMENT_ID=your_measurement_id_here
+   ```
+
+#### Production Deployment (GitHub Pages)
+
+The GitHub Actions workflow automatically handles environment variables using GitHub Secrets:
+
+1. **Set up GitHub Secrets:**
+   - Go to your repository Settings → Secrets and variables → Actions
+   - Add the following repository secrets with your Firebase values:
+     - `FIREBASE_API_KEY`
+     - `FIREBASE_AUTH_DOMAIN`
+     - `FIREBASE_PROJECT_ID`
+     - `FIREBASE_STORAGE_BUCKET`
+     - `FIREBASE_MESSAGING_SENDER_ID`
+     - `FIREBASE_APP_ID`
+     - `FIREBASE_MEASUREMENT_ID`
+
+2. **The deployment workflow will automatically:**
+   - Create a `.env` file from your GitHub secrets
+   - Generate configuration from environment variables
+   - Compile TypeScript with proper environment variable support
+   - Deploy to GitHub Pages
 
 ### GitHub Pages Deployment
 

@@ -4,9 +4,10 @@
   "description": "Weekly chores app - Web server deployment only",
   "main": "index.html",
   "scripts": {
-    "start": "npx tsc && npx http-server . -p 3000 -o",
-    "build": "npx tsc",
-    "dev": "npx tsc --watch"
+    "prebuild": "node scripts/generate-config.js",
+    "start": "npm run prebuild && npx tsc && npx http-server . -p 3000 -o",
+    "build": "npm run prebuild && npx tsc",
+    "dev": "npm run prebuild && npx tsc --watch"
   },
   "dependencies": {
     "vue": "^3.5.21"
