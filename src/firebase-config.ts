@@ -35,6 +35,8 @@ try {
     setDoc(testDoc, { timestamp: new Date().toISOString() })
       .then(() => console.log('✅ Firestore write test successful'))
       .catch((error: any) => console.error('❌ Firestore write test failed:', error));
+  } catch (error: any) {
+    console.error('❌ Firestore test setup failed:', error);
   }
 } catch (error) {
   console.error('❌ Firebase initialization failed:', error);
