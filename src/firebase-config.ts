@@ -14,7 +14,7 @@ const firebaseConfig = {
     messagingSenderId: config.FIREBASE_MESSAGING_SENDER_ID,
     appId: config.FIREBASE_APP_ID,
     measurementId: config.FIREBASE_MEASUREMENT_ID,
-    databaseURL: `https://${config.FIREBASE_PROJECT_ID}-default-rtdb.firebaseio.com/`
+    databaseURL: `https://${config.FIREBASE_PROJECT_ID}-default-rtdb.firebaseio.com/`,
 };
 
 // Initialize Firebase
@@ -35,7 +35,7 @@ try {
     setDoc(testDoc, { timestamp: new Date().toISOString() })
       .then(() => console.log('✅ Firestore write test successful'))
       .catch((error) => console.error('❌ Firestore write test failed:', error));
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Firestore test setup failed:', error);
   }
 } catch (error) {
