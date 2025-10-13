@@ -34,9 +34,7 @@ try {
     const testDoc = doc(testCollection, 'connection-test');
     setDoc(testDoc, { timestamp: new Date().toISOString() })
       .then(() => console.log('✅ Firestore write test successful'))
-      .catch((error) => console.error('❌ Firestore write test failed:', error));
-  } catch (error: any) {
-    console.error('❌ Firestore test setup failed:', error);
+      .catch((error: any) => console.error('❌ Firestore write test failed:', error));
   }
 } catch (error) {
   console.error('❌ Firebase initialization failed:', error);
