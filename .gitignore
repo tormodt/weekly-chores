@@ -28,6 +28,9 @@ build/
 .env.production
 .env.development
 
+# Auto-generated config file
+src/config.ts
+
 # IDE files
 .vscode/
 .idea/
